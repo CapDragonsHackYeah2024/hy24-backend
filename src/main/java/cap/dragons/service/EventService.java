@@ -1,5 +1,8 @@
 package cap.dragons.service;
 
+import cap.dragons.domain.EventDTO;
+import cap.dragons.domain.EventType;
+import cap.dragons.domain.mapper.EventMapper;
 import cap.dragons.entity.Event;
 import cap.dragons.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,29 +17,39 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public Event createEvent(Event event) {
-        return eventRepository.save(event);
+    @Autowired
+    private EventMapper eventMapper;
+
+    public EventDTO createEvent(EventDTO eventDTO) {
+        Event event = eventMapper.toEntity(eventDTO);
+        Event savedEvent = eventRepository.save(event);
+        return eventMapper.toDTO(savedEvent);
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        return eventMapper.toDTOList(events);
     }
 
-    public Event getEventById(Long id) {
-        return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+    public EventDTO getEventById(Long id) {
+        Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
+        return eventMapper.toDTO(event);
     }
 
-    public Event updateEvent(Long id, Event updatedEvent) {
+    public EventDTO updateEvent(Long id, EventDTO eventDTO) {
         Event existingEvent = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event not found"));
-        existingEvent.setCoordinates(updatedEvent.getCoordinates());
-        existingEvent.setEventType(updatedEvent.getEventType());
-        existingEvent.setEventDate(updatedEvent.getEventDate());
-        existingEvent.setDescription(updatedEvent.getDescription());
-        return eventRepository.save(existingEvent);
+
+        // Update the existing event fields with the data from DTO
+        existingEvent.setCoordinates(eventDTO.getCoordinates());
+        existingEvent.setEventType(EventType.valueOf(eventDTO.getEventType()));
+        existingEvent.setEventDate(eventDTO.getEventDate());
+        existingEvent.setDescription(eventDTO.getDescription());
+
+        Event updatedEvent = eventRepository.save(existingEvent);
+        return eventMapper.toDTO(updatedEvent);
     }
 
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
     }
 }
-

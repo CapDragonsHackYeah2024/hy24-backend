@@ -17,6 +17,8 @@ public class Event {
 
     private String coordinates;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
