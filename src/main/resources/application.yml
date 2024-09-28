@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-cront7q3esus73c4fn10-a.frankfurt-postgres.render.com:5432/capdragons
+    username: capdragons
+    password: czwF4tJf9oxrXa4rT9XmeGwfP1pqUOUt
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
