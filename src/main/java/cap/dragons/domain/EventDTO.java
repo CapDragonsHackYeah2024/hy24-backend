@@ -1,33 +1,17 @@
-package cap.dragons.entity;
+package cap.dragons.domain;
 
-import cap.dragons.domain.EventType;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "events")
-
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//@Data
+public class EventDTO {
     private Long id;
-
     private String coordinates;
-
-    private String name;
-
-    @Enumerated(EnumType.STRING)
-    private EventType eventType;
-
+    private String eventType;
     private LocalDateTime eventDate;
-
     private String description;
-
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<EventUser> eventUsers;
+    private String name;
 
     public Long getId() {
         return id;
@@ -45,19 +29,11 @@ public class Event {
         this.coordinates = coordinates;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public EventType getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
@@ -77,11 +53,11 @@ public class Event {
         this.description = description;
     }
 
-    public List<EventUser> getEventUsers() {
-        return eventUsers;
+    public String getName() {
+        return name;
     }
 
-    public void setEventUsers(List<EventUser> eventUsers) {
-        this.eventUsers = eventUsers;
+    public void setName(String name) {
+        this.name = name;
     }
 }
